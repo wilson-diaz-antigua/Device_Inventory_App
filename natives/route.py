@@ -40,17 +40,17 @@ def create():
     "Command": "get",
     "Output": {
         "0x954A00E7B0026": {
-            "name": "POST 001",
+            "name": "LL 001",
             "wifiAddress": "c4:2a:d0:5f:ca:b0",
             "serialNumber": "F9FZ5J5KMF3M"
         },
         "0x1459941A41402E": {
-            "name": "POST 002",
+            "name": "LL 002",
             "wifiAddress": "4c:b9:10:97:e9:ed",
             "serialNumber": "GG7FFKTQQ1GC"
         },  
         "0x1459FR41A41402E": {
-            "name": "POST 03",
+            "name": "LL 03",
             "wifiAddress": "4c:b9:10:97:e9:ed",
             "serialNumber": "GG7FFKTQQ1GC"
         },
@@ -65,16 +65,29 @@ def create():
         "0x954A00E7B0026",
         "0x1459941A41402E"
     ]}
-    df = pd.DataFrame(Data(output))
-    addToDB=False
     
+    addToDB="False"
+    deviceCount =len(output['Output'])-1
+    print(deviceCount)
+
+          
     if request.method == 'POST':
-        addToDB = bool(request.json["accept"])
-        print(addToDB)
-        df.to_sql(name='voyce_device', con=db.engine, index=False,if_exists= 'append')
+        addToDB = request.json["accept"]
+         
+        if addToDB =="True":
+            print(addToDB) 
+            for name, info in output['Output'].items():
+                if name != 'Errors':
+                    data = Voyce( Hospital=info['name'].split(' ')[0],
+                            Device = info['name'].split(' ')[1],
+                            SN = info['serialNumber'],
+                            MAC =info['wifiAddress'],
+                            DateAdded = date.today())
+                    db.session.add(data)
+                    db.session.commit()
 
         return jsonify({'results': 'success'})
-    
+    print(addToDB) 
     if request.method == 'GET':
         try:
         
@@ -93,7 +106,7 @@ def create():
             #     col.append( f"Device {df['Device'][index]} at {df['Hospital'][index]}  has been added")
                 
             #     added.append({"response" : col[index] })
-            response= jsonify({"results": f"{len(df.index)} devices ready"})
+            response= jsonify({"results": f"{deviceCount} devices ready"})
             response.headers.add('Access-Control-Allow-Origin', '*')
             return response
 
