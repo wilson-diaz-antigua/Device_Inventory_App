@@ -6,7 +6,6 @@ from natives import db, ma
 
 class Voyce(db.Model):
     __tablename__ = 'voyce_device'
-
     id = db.Column(db.Integer, primary_key=True)
 
     Hospital = db.Column(db.Text)

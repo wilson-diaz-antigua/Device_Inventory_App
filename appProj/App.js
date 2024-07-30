@@ -1,11 +1,9 @@
-
-import { MD3LightTheme as DefaultTheme, AppRegistry } from "react-native";
-import { Provider as PaperProvider,Button} from "react-native-paper";
-
+import { MD3LightTheme as DefaultTheme } from "react-native";
+import { Provider as PaperProvider } from "react-native-paper";
 
 import { NavigationContainer } from "@react-navigation/native";
-import Navigator from "./components/Stack";
 import Create from "./components/Create";
+import Navigator from "./components/Stack";
 const theme = {
   ...DefaultTheme,
 };
@@ -16,9 +14,10 @@ export default function App() {
       <NavigationContainer>
         <Navigator />
 
-      <Create/>
+        <Create />
       </NavigationContainer>
-
     </PaperProvider>
   );
 }
+
+import React from "react";
