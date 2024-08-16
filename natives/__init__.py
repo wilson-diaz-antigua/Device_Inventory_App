@@ -7,7 +7,7 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 CORS(app)
 
-sqlite=f"sqlite:////Users/wilson/Desktop/native/mock.db"
+sqlite=f"sqlite:////Users/wilson/Desktop/native/VD.db"
 supabase=f"sqlite:////Users/wilson/Desktop/native/mock.db"
 app.config["SQLALCHEMY_DATABASE_URI"] = sqlite
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False

@@ -65,7 +65,7 @@ tripUrl = {
 # ["n", "q", "r", "w"]
 
 
-headers = {"x-api-key": "8ogTVWVBY55OObVPvYpmu4zQAjmlHl3Q8HmQ1BpV"}
+headers = {"x-api-key": API_KEY}
 alertUrl = (
     "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/camsys%2Fsubway-alerts"
 )
