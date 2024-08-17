@@ -1,14 +1,18 @@
 
+import os
+
+from dotenv import load_dotenv
 from flask import Flask
 from flask_cors import CORS
 from flask_marshmallow import Marshmallow
 from flask_sqlalchemy import SQLAlchemy
 
+load_dotenv(".env")
+
 app = Flask(__name__)
 CORS(app)
 
-sqlite=f"sqlite:////Users/wilson/Desktop/native/VD.db"
-supabase=f"sqlite:////Users/wilson/Desktop/native/mock.db"
+sqlite= os.getenv("SQLITE_URL")
 app.config["SQLALCHEMY_DATABASE_URI"] = sqlite
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config['CORS_HEADERS'] = 'Content-Type'

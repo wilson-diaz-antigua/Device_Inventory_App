@@ -64,54 +64,56 @@ def create():
     #     "0x954A00E7B0026",
     #     "0x1459941A41402E"
     # ]}
-    
-    addToDB=False
-    # deviceCount =len(output['Output'])-1
-    # print(deviceCount)
+    try:
+        cmd = 'cfgutil -f --format JSON get name serialNumber wifiAddress'
+        result = subprocess.run(
+            cmd, shell=True, capture_output=True, text=True, check=True)
+        output = json.loads(str(result.stdout))
 
-          
-    # if request.method == 'POST':
-    #     addToDB = request.json["accept"]
-         
-    #     if addToDB :
-    #         print(addToDB) 
-    #         for name, info in output['Output'].items():
-    #             if name != 'Errors':
-    #                 data = Voyce( Hospital=info['name'].split(' ')[0],
-    #                         Device = info['name'].split(' ')[1],
-    #                         SN = info['serialNumber'],
-    #                         MAC =info['wifiAddress'],
-    #                         DateAdded = date.today())
-    #                 db.session.add(data)
-    #                 db.session.commit()
+        addToDB=False
+        # deviceCount =len(output['Output'])-1
+        # print(deviceCount)
 
-    #     return jsonify({'results': 'success'})
-    # print(addToDB) 
-    if request.method == 'GET':
-        try:
-        
-            cmd = 'cfgutil -f --format JSON get name serialNumber wifiAddress'
-            result = subprocess.run(
-                cmd, shell=True, capture_output=True, text=True, check=True)
-            output = json.loads(str(result.stdout))
-
-            if addToDB:
-                print("triggered "+ str( addToDB))
             
-            df.to_sql(name='voyce_device', con=db.engine, index=False,if_exists= 'append')
-            col=[]
-            added=[]
-            for index in pddf.index:
-                col.append( f"Device {df['Device'][index]} at {df['Hospital'][index]}  has been added")
+        if request.method == 'POST':
+            addToDB = request.json["accept"]
+            
+            if addToDB :
+                print(addToDB) 
+                for name, info in output['Output'].items():
+                    if name != 'Errors':
+                        data = Voyce( Hospital=info['name'].split(' ')[0],
+                                Device = info['name'].split(' ')[1] if len(info['name'].split(' ')) > 1 else info['name'] ,
+                                SN = info['serialNumber'],
+                                MAC =info['wifiAddress'],
+                                DateAdded = date.today())
+                        print(data)
+                        db.session.add(data)
+                        db.session.commit()
+
+            return jsonify({'results': 'success'})
+    # print(addToDB) 
+    # if request.method == 'GET':
+    #     try:
+        
+
+    #         if addToDB:
+    #             print("triggered "+ str( addToDB))
+            
+    #         df.to_sql(name='voyce_device', con=db.engine, index=False,if_exists= 'append')
+    #         col=[]
+    #         added=[]
+    #         for index in df.index:
+    #             col.append( f"Device {df['Device'][index]} at {df['Hospital'][index]}  has been added")
                 
-                added.append({"response" : col[index] })
-            response= jsonify({"results": f"devices ready"})
-            response.headers.add('Access-Control-Allow-Origin', '*')
-            return response
+    #             added.append({"response" : col[index] })
+    #         response= jsonify({"results": f"devices ready"})
+    #         response.headers.add('Access-Control-Allow-Origin', '*')
+    #         return response
 
 
-        except subprocess.CalledProcessError:
-            return jsonify({'results': 'nothing to add'})
+    except subprocess.CalledProcessError:
+        return jsonify({'results': 'nothing to add'})
         
     
 @app.route('/edit/<id>/', methods=["PUT"])
