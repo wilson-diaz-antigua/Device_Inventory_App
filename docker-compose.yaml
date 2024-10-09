@@ -1,0 +1,40 @@
+services:
+  frontend:
+    build: ./appProj
+    container_name: native_frontend_c
+    ports:
+      - "19006:19006"
+    networks:
+      - mynetwork
+
+  backend: 
+    build: ./backend
+    container_name: native_backend_c
+    ports:
+      - "8080:8080"
+    networks:
+      - mynetwork  
+    volumes:
+      - ./db:/app/db
+    # depends_on:
+    #   db:
+    #     condition: service_healthy
+#   db:
+#     container_name: native_sqlite_db
+#     build:
+#       context: .
+#       dockerfile: Dockerfile
+#     volumes:
+#       - ./db/mock.db:/app/db
+#     networks:
+#       - mynetwork
+#     command: ["tail", "-f", "/dev/null"]
+
+# volumes:
+#   sqlite_data:
+
+networks:
+  mynetwork:
+    driver: bridge
+
+

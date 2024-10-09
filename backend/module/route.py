@@ -2,15 +2,13 @@
 import json
 import subprocess
 
-import pandas as pd
 from flask import jsonify, request
 from flask_cors import cross_origin
+from module import app
 
-from natives import app
-from natives.models import *
-from natives.parsing import *
-
-db.init_app(app)
+from .db import db
+from .models import *
+from .parsing import *
 
 voyceSchemas = Voyce_Schema(many=True)
 voyceSchema = Voyce_Schema()
@@ -19,17 +17,12 @@ voyceSchema = Voyce_Schema()
 @app.route('/read', methods=['GET','POST'])
 
 def index():
-    if request.method == 'POST':
-        searchquery =  request.json["serial"]
 
-        if searchquery:
-            results = Voyce.query.filter(Voyce.SN.icontains(searchquery) ).all()
-        else:
-            results =  Voyce.query.all()
-        out = voyceSchemas.dump(results)
-        response = jsonify(out)
-        response.headers.add('Access-Control-Allow-Origin', '*')
-        return response
+    results =  Voyce.query.all()
+    out = voyceSchemas.dump(results)
+    response = jsonify(out)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
     
 
 

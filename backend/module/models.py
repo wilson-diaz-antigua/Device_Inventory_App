@@ -1,7 +1,8 @@
 
 from datetime import date
 
-from natives import db, ma
+from . import ma
+from .db import db
 
 
 class Voyce(db.Model):

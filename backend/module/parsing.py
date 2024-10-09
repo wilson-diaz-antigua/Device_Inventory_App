@@ -1,8 +1,10 @@
-from datetime import date 
+from datetime import date
+
+
 def Data(output):
     deviceInfo = []
 
-    for name, info in output['Output'].items():
+    for name, iπnfo in output['Output'].items():
         if name != 'Errors':
             device = {
                 'Hospital': '',
